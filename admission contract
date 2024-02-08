@@ -1,0 +1,37 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract CollegeAdmission {
+    uint256 public totalStudents;
+    uint256 public reservedSeatsXandY = 100;
+
+    function admissionProcess(uint256 _numStudents) external {
+        assert(_numStudents > 1000);
+        totalStudents = _numStudents;
+    }
+
+    function selectionRound1(string memory _category) external pure {
+        require(
+            keccak256(abi.encodePacked(_category)) == keccak256(abi.encodePacked("1A")) ||
+            keccak256(abi.encodePacked(_category)) == keccak256(abi.encodePacked("1B")) ||
+            keccak256(abi.encodePacked(_category)) == keccak256(abi.encodePacked("2A")) ||
+            keccak256(abi.encodePacked(_category)) == keccak256(abi.encodePacked("2B")) ||
+            keccak256(abi.encodePacked(_category)) == keccak256(abi.encodePacked("3A")),
+            "No seat is allocated"
+        );
+       
+    }
+
+    function SelectionRound2(string memory _category) external {
+        if (reservedSeatsXandY > 0 &&
+            (keccak256(abi.encodePacked(_category)) == keccak256(abi.encodePacked("1A")) ||
+             keccak256(abi.encodePacked(_category)) == keccak256(abi.encodePacked("1B")))) {
+            reservedSeatsXandY--;
+
+            // Successful seat allocation
+        } else {
+            // If the condition is not met, revert with a custom error message
+            revert("You are not eligible to get a seat in X and Y college");
+        }
+    }
+}
